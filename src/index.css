@@ -9,10 +9,18 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #2a2b33;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @theme {
+    --color-primary: #4206f7;
+    --color-silver: #c9c9c9;
+    --color-light-gray: #aaaaaa;
+    --color-steel: #4b4b4b;
+    --color-muted: #8e8e8e;
+  }
 }
