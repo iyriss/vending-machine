@@ -1,5 +1,6 @@
 import { Display } from './components/Display';
 import { Drinks } from './components/Drinks';
+import { Coins } from './components/Coins';
 import './App.css';
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <div className='w-full min-h-screen h-full flex justify-center items-center flex-col'>
       <Display message='Select a drink' />
       <Drinks onSelect={() => {}} />
+      <Coins />
     </div>
   );
 }

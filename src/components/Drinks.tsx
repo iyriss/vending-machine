@@ -11,9 +11,9 @@ const drinks = [
 
 export const Drinks = ({ onSelect }: DrinksProps) => {
   return (
-    <div className='my-8 w-full max-w-[424px]'>
+    <div className='mt-8 w-full max-w-[424px]'>
       <div className='text-xl font-bold mb-4'>Drinks</div>
-      <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 sm:max-w-[424px] mx-auto'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:max-w-[424px] mx-auto'>
         {drinks.map(({ name, price, available }) => (
           <div
             className='border shadow-md rounded-md px-2 py-4 h-fit bg-white text-steel border-silver w-full flex flex-col justify-center items-center'
