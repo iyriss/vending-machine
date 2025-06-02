@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { Display } from './components/Display';
 import { Coins } from './components/Coins';
 import Drinks from './components/Drinks';
@@ -25,7 +25,7 @@ type Coin = 5 | 10 | 25;
 function App() {
   const [drinks, setDrinks] = useState(initialDrinks);
   const [selectedDrink, setSelectedDrink] = useState<DrinkTypes | null>(null);
-  const [message, setMessage] = useState<string>(initialMessage);
+  const [message, setMessage] = useState<string | JSX.Element>(initialMessage);
   const [insertedCoins, setInsertedCoins] = useState<number>(0);
   const [coinInventory, setCoinInventory] = useState(initialCoins);
   const [sessionCoins, setSessionCoins] = useState<Record<Coin, number>>({
@@ -69,7 +69,16 @@ function App() {
     setSessionCoins(newSessionCoins);
 
     if (remaining > 0) {
-      setMessage(`Inserted ${newAmount}¢. Need ${remaining}¢ more.`);
+      setMessage(
+        (
+          <div>
+            <div>Balance: {newAmount}¢</div>
+            <div>
+              Insert {remaining}¢ more for {drink.name}
+            </div>
+          </div>
+        ) as JSX.Element
+      );
     } else {
       const change = newAmount - drink.price;
       if (!canMakeChange(change)) {

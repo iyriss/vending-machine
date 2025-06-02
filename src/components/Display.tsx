@@ -1,5 +1,7 @@
+import { type JSX } from 'react';
+
 type DisplayProps = {
-  message: string;
+  message: string | JSX.Element;
 };
 
 const coins = [5, 10, 25];
