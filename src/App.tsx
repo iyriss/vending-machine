@@ -221,7 +221,11 @@ function App() {
             selectedDrink={selectedDrink}
             onSelect={handleSelectDrink}
           />
-          <Coins onCoinClick={handleCoinClick} />
+          <Coins
+            cancelButtonEnabled={insertedCoins > 0 || !!selectedDrink}
+            onCoinClick={handleCoinClick}
+            onCancel={handleCancel}
+          />
         </div>
 
         <AdminPanel
