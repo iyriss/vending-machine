@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Display } from './components/Display';
 import { Coins } from './components/Coins';
 import Drinks from './components/Drinks';
+import { AdminPanel } from './components/AdminPanel';
 import './App.css';
 
-const initialMessage = 'Select a drink';
+const initialMessage = 'Select an option';
 
 const initialDrinks: Drink[] = [
   { key: 'cola', name: 'Cola', price: 25, available: 10 },
@@ -53,7 +54,7 @@ function App() {
 
   function handleCoinClick(coin: Coin) {
     if (!selectedDrink) {
-      setMessage('Please select a drink first.');
+      setMessage('Please select a beverage first.');
       return;
     }
 
@@ -159,19 +160,23 @@ function App() {
   }
 
   return (
-    <div className='w-full min-h-screen h-full flex items-center justify-center'>
-      <div className='w-full max-w-[465px] border border-silver/20 rounded-lg px-8 py-10'>
-        <Display message={message} />
-        <Drinks
-          drinks={drinks}
-          selectedDrink={selectedDrink}
-          onSelect={handleSelectDrink}
+    <div className='m-auto w-full min-h-screen h-full gap-10 py-5 flex justify-center'>
+      <div className='flex justify-center w-full h-full gap-10 mt-10'>
+        <div className='bg-midnight w-full h-full max-w-[465px] border border-silver/20 rounded-lg px-8 py-10'>
+          <Display message={message} />
+          <Drinks
+            drinks={drinks}
+            selectedDrink={selectedDrink}
+            onSelect={handleSelectDrink}
+          />
+          <Coins onCoinClick={handleCoinClick} />
+        </div>
+
+        <AdminPanel
+          coinInventory={coinInventory}
+          sessionCoins={sessionCoins}
+          selectedDrink={drinks.find((drink) => selectedDrink === drink.key)}
         />
-        <Coins onCoinClick={handleCoinClick} />
-      </div>
-      <div>
-        Coin inventory
-        {<pre>{JSON.stringify(coinInventory, null, 2)}</pre>}
       </div>
     </div>
   );

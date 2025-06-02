@@ -26,7 +26,7 @@ const Drinks: React.FC<DrinksProps> = ({ drinks, selectedDrink, onSelect }) => {
 
   return (
     <div className='mt-4 w-full'>
-      <div className='text-xl font-bold mb-4'>Drinks</div>
+      <div className='text-xl font-bold mb-4'>Beverages</div>
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[424px] mx-auto'>
         {drinks.map((drink) => (
           <DrinkCard

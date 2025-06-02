@@ -19,7 +19,7 @@ export const Coins = (props: CoinsProps) => {
             key={coin}
             type='button'
             onClick={() => handleCoinClick(coin)}
-            className='font-bold shadow-lg hover:opacity-90 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-800 h-14 w-14 flex items-center justify-center border-2 border-yellow-500/30 text-yellow-100 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400'
+            className='font-bold shadow-lg hover:opacity-90 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-800 h-14 w-14 flex items-center justify-center border-2 border-yellow-500/30 text-yellow-100 relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-yellow-400 cursor-pointer'
             aria-label={`Insert ${coin} cents`}
           >
             <div className='absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-transparent'></div>
