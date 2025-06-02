@@ -72,9 +72,9 @@ function App() {
       if (!canMakeChange(change)) {
         setInsertedCoins(0);
         setSessionCoins({ 5: 0, 10: 0, 25: 0 });
-        setTemporaryMessage(
-          'Cannot provide change. Please cancel and use exact amount.'
-        );
+        setTemporaryMessage('Cannot provide change, please use exact amount.');
+        setSelectedDrink(null);
+
         return;
       }
       dispenseDrink(drink.key);
@@ -86,9 +86,10 @@ function App() {
       const remaining = drink.price - insertedCoins;
       setMessage(
         <div>
-          <div>Balance: {insertedCoins}¢</div>
+          <div>Balance: ${(insertedCoins / 100).toFixed(2)}</div>
           <div>
-            Insert {remaining}¢ more for {drink.name}
+            Insert ${(remaining / 100).toFixed(2)}{' '}
+            {remaining === drink.price ? '' : 'more'} for {drink.name}
           </div>
         </div>
       );
@@ -107,7 +108,7 @@ function App() {
     if (!selectedDrink) {
       setMessage(
         <div>
-          <div>Balance: {newAmount}¢</div>
+          <div>Balance: ${(newAmount / 100).toFixed(2)}</div>
           <div>Select a beverage</div>
         </div>
       );
@@ -122,9 +123,9 @@ function App() {
     if (remaining > 0) {
       setMessage(
         <div>
-          <div>Balance: {newAmount}¢</div>
+          <div>Balance: ${(newAmount / 100).toFixed(2)}</div>
           <div>
-            Insert {remaining}¢ more for {drink.name}
+            Insert ${(remaining / 100).toFixed(2)} more for {drink.name}
           </div>
         </div>
       );
@@ -133,9 +134,8 @@ function App() {
       if (!canMakeChange(change)) {
         setInsertedCoins(0);
         setSessionCoins({ 5: 0, 10: 0, 25: 0 });
-        setTemporaryMessage(
-          'Cannot provide change. Please cancel and use exact amount.'
-        );
+        setTemporaryMessage('Cannot provide change, please use exact amount.');
+        setSelectedDrink(null);
         return;
       }
 
@@ -176,7 +176,8 @@ function App() {
 
     setCoinInventory(newInventory);
     setTemporaryMessage(
-      ((prev: string) => `${prev} Returned ${amount}¢`) as unknown as string
+      ((prev: string) =>
+        `${prev} Returned $${(amount / 100).toFixed(2)}`) as unknown as string
     );
   }
 
