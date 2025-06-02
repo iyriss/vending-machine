@@ -6,3 +6,5 @@ type Drink = {
     price: number;
     available: number;
 };
+
+type Coin = 5 | 10 | 25;
