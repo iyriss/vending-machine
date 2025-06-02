@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Display } from './components/Display';
-import { Drinks } from './components/Drinks';
+import Drinks from './components/Drinks';
 import { Coins } from './components/Coins';
 import './App.css';
 
@@ -31,7 +31,7 @@ function App() {
           selectedDrink={selectedDrink}
           onSelect={handleSelectDrink}
         />
-        {selectedDrink && <Coins />}
+        <Coins />
       </div>
     </div>
   );
