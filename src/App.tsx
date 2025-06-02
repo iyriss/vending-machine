@@ -1,4 +1,4 @@
-import { useState, type JSX } from 'react';
+import { useState, useRef, type JSX } from 'react';
 import { Display } from './components/Display';
 import { Coins } from './components/Coins';
 import Drinks from './components/Drinks';
@@ -34,7 +34,23 @@ function App() {
     25: 0,
   });
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function setTemporaryMessage(content: string | JSX.Element, duration = 3000) {
+    setMessage(content);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setMessage(initialMessage);
+      timeoutRef.current = null;
+    }, duration);
+  }
+
   function handleSelectDrink(key: DrinkTypes | null) {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     const drink = drinks.find((drink) => drink.key === key);
     if (!drink) return;
 
@@ -44,47 +60,80 @@ function App() {
     }
 
     if (drink.available === 0) {
-      setMessage(`${drink.name} is out of stock.`);
+      setTemporaryMessage(`${drink.name} is out of stock.`);
       return;
     }
 
-    setMessage(`Insert ${drink.price}¢ for ${drink.name}`);
     setSelectedDrink(key);
+
+    // Check if we already have enough money
+    if (insertedCoins >= drink.price) {
+      const change = insertedCoins - drink.price;
+      if (!canMakeChange(change)) {
+        setInsertedCoins(0);
+        setSessionCoins({ 5: 0, 10: 0, 25: 0 });
+        setTemporaryMessage(
+          'Cannot provide change. Please cancel and use exact amount.'
+        );
+        return;
+      }
+      dispenseDrink(drink.key);
+      returnChange(change);
+      setInsertedCoins(0);
+      setSelectedDrink(null);
+      commitCoins(sessionCoins);
+    } else {
+      const remaining = drink.price - insertedCoins;
+      setMessage(
+        <div>
+          <div>Balance: {insertedCoins}¢</div>
+          <div>
+            Insert {remaining}¢ more for {drink.name}
+          </div>
+        </div>
+      );
+    }
   }
 
   function handleCoinClick(coin: Coin) {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    const newAmount = insertedCoins + coin;
+    setInsertedCoins(newAmount);
+    const newSessionCoins = { ...sessionCoins, [coin]: sessionCoins[coin] + 1 };
+    setSessionCoins(newSessionCoins);
+
     if (!selectedDrink) {
-      setMessage('Please select a beverage first.');
+      setMessage(
+        <div>
+          <div>Balance: {newAmount}¢</div>
+          <div>Select a beverage</div>
+        </div>
+      );
       return;
     }
 
     const drink = drinks.find((drink) => drink.key === selectedDrink);
     if (!drink) return;
 
-    const newAmount = insertedCoins + coin;
     const remaining = drink.price - newAmount;
-
-    setInsertedCoins(newAmount);
-    const newSessionCoins = { ...sessionCoins, [coin]: sessionCoins[coin] + 1 };
-    setSessionCoins(newSessionCoins);
 
     if (remaining > 0) {
       setMessage(
-        (
+        <div>
+          <div>Balance: {newAmount}¢</div>
           <div>
-            <div>Balance: {newAmount}¢</div>
-            <div>
-              Insert {remaining}¢ more for {drink.name}
-            </div>
+            Insert {remaining}¢ more for {drink.name}
           </div>
-        ) as JSX.Element
+        </div>
       );
     } else {
       const change = newAmount - drink.price;
       if (!canMakeChange(change)) {
         setInsertedCoins(0);
         setSessionCoins({ 5: 0, 10: 0, 25: 0 });
-        setMessage(
+        setTemporaryMessage(
           'Cannot provide change. Please cancel and use exact amount.'
         );
         return;
@@ -126,7 +175,9 @@ function App() {
     }
 
     setCoinInventory(newInventory);
-    setMessage((prev) => `${prev} Returned ${amount}¢`);
+    setTemporaryMessage(
+      ((prev: string) => `${prev} Returned ${amount}¢`) as unknown as string
+    );
   }
 
   function dispenseDrink(key: DrinkTypes) {
@@ -137,10 +188,7 @@ function App() {
     );
     const drink = drinks.find((drink) => drink.key === key);
     if (drink) {
-      setMessage(`Enjoy your ${drink.name}!`);
-      setTimeout(() => {
-        setMessage(initialMessage);
-      }, 3000);
+      setTemporaryMessage(`Enjoy your ${drink.name}!`);
     }
   }
 
@@ -148,16 +196,11 @@ function App() {
     setInsertedCoins(0);
     setSelectedDrink(null);
     setSessionCoins({ 5: 0, 10: 0, 25: 0 });
-    setMessage('Transaction cancelled.');
-    setTimeout(() => {
-      setMessage(initialMessage);
-    }, 3000);
+    setTemporaryMessage('Transaction cancelled.');
   }
 
   function commitCoins(newSessionCoins: Record<Coin, number>) {
     setCoinInventory((prev) => {
-      console.log('prev', prev);
-      console.log('sessionCoins', sessionCoins);
       const updated = { ...prev };
 
       for (const coin of [5, 10, 25] as Coin[]) {
