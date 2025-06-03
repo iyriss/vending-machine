@@ -239,7 +239,7 @@ function App() {
 
   return (
     <div className='min-w-screen relative w-full min-h-screen h-full gap-10'>
-      <div className='w-full h-full mx-auto mt-20 relative'>
+      <div className='w-full h-full mx-auto my-20 relative'>
         <div className='bg-midnight w-full h-full mx-auto max-w-[465px] border border-silver/20 rounded-lg px-8 py-10'>
           <Display message={message} />
           <Drinks
