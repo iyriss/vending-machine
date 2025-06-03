@@ -36,13 +36,17 @@ function App() {
   });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function setTemporaryMessage(content: string | JSX.Element, duration = 3000) {
+  function setTemporaryMessage(
+    content: string | JSX.Element,
+    duration = 3000,
+    nextMessage: string | JSX.Element = initialMessage
+  ) {
     setMessage(content);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      setMessage(initialMessage);
+      setMessage(nextMessage);
       timeoutRef.current = null;
     }, duration);
   }
@@ -55,12 +59,27 @@ function App() {
     if (!drink) return;
 
     if (drink.key === selectedDrink) {
-      handleCancel();
+      setSelectedDrink(null);
+      setMessage(
+        <div>
+          {insertedCoins > 0 && (
+            <div>Balance: ${(insertedCoins / 100).toFixed(2)}</div>
+          )}
+          <div className='mt-2'>Select a beverage</div>
+        </div>
+      );
       return;
     }
 
     if (drink.available === 0) {
-      setTemporaryMessage(`${drink.name} is out of stock.`);
+      setTemporaryMessage(
+        `${drink.name} is out of stock.`,
+        3000,
+        <div>
+          <div>Balance: ${(insertedCoins / 100).toFixed(2)}</div>
+          <div className='mt-2'>Select an option</div>
+        </div>
+      );
       return;
     }
 
@@ -92,7 +111,7 @@ function App() {
     if (!selectedDrink) return;
 
     const drink = drinks.find((drink) => drink.key === selectedDrink);
-    if (!drink) return;
+    if (!drink || drink.available < 1) return;
 
     const change = insertedCoins - drink.price;
     if (!canMakeChange(change)) {
@@ -130,7 +149,7 @@ function App() {
     }
 
     const drink = drinks.find((drink) => drink.key === selectedDrink);
-    if (!drink) return;
+    if (!drink || drink.available < 1) return;
 
     const remaining = drink.price - newAmount;
 

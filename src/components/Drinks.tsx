@@ -19,9 +19,7 @@ type DrinkCardButtonProps = {
 
 const Drinks: React.FC<DrinksProps> = ({ drinks, selectedDrink, onSelect }) => {
   const handleSelect = (drink: Drink) => {
-    if (drink.available > 0) {
-      onSelect(drink.key);
-    }
+    onSelect(drink.key);
   };
 
   return (
@@ -52,7 +50,7 @@ const DrinkCard: React.FC<DrinkCardProps> = ({
   const isSoldOut = available === 0;
 
   const handleClick = () => {
-    if (!isDisabled && !isSoldOut) {
+    if (!isDisabled) {
       onSelect(drink);
     }
   };
