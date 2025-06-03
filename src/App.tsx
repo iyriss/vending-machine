@@ -5,7 +5,7 @@ import Drinks from './components/Drinks';
 import { AdminPanel } from './components/AdminPanel';
 import './App.css';
 
-const initialMessage = 'Select an option';
+const initialMessage = 'Select a beverage';
 
 const initialDrinks: Drink[] = [
   { key: 'cola', name: 'Cola', price: 25, available: 10 },
@@ -65,7 +65,7 @@ function App() {
           {insertedCoins > 0 && (
             <div>Balance: ${(insertedCoins / 100).toFixed(2)}</div>
           )}
-          <div className='mt-2'>Select a beverage</div>
+          <div className='mt-2'>{initialMessage}</div>
         </div>
       );
       return;
@@ -77,7 +77,7 @@ function App() {
         3000,
         <div>
           <div>Balance: ${(insertedCoins / 100).toFixed(2)}</div>
-          <div className='mt-2'>Select an option</div>
+          <div className='mt-2'>{initialMessage}</div>
         </div>
       );
       return;
@@ -142,7 +142,7 @@ function App() {
       setMessage(
         <div>
           <div>Balance: ${(newAmount / 100).toFixed(2)}</div>
-          <div>Select a beverage</div>
+          <div>{initialMessage}</div>
         </div>
       );
       return;
