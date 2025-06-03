@@ -92,7 +92,7 @@ const DrinkCard: React.FC<DrinkCardProps> = ({
 
 const DrinkCardButton: React.FC<DrinkCardButtonProps> = (props) => {
   if (props.isSoldOut) {
-    return <span className='font-bold'>Sold out</span>;
+    return <span className='font-bold'>Out of stock</span>;
   }
 
   if (props.isSelected) {

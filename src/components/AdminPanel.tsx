@@ -2,6 +2,7 @@ type AdminPanelProps = {
   coinInventory: Record<Coin, number>;
   sessionCoins: Record<Coin, number>;
   selectedDrink?: Drink;
+  onClose?: () => void;
 };
 
 export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
@@ -15,8 +16,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
   );
 
   return (
-    <div className='w-full mb-auto h-full max-w-[465px] border border-silver/20 rounded-lg px-8 py-10 bg-midnight'>
-      <h2 className='text-2xl font-bold mb-6'>Admin Panel</h2>
+    <div className='w-[465px] h-full bg-midnight border-l border-silver/20 px-8 py-10 overflow-y-auto'>
+      <div className='flex justify-between items-center mb-6'>
+        <h2 className='text-2xl font-bold'>Admin Panel</h2>
+        <div
+          className='cursor-pointer flex items-center gap-1 hover:underline text-[#9877ff] transition-opacity'
+          onClick={props.onClose}
+        >
+          Close
+        </div>
+      </div>
 
       <div className='space-y-6'>
         <div className='py-4'>
@@ -36,7 +45,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
           </div>
           <div className='mt-3 pt-3 flex items-center gap-2 justify-between'>
             <span className='text-white/70'>Total: </span>
-            <span className='font-semibold'>{totalInventory}¢</span>
+            <span className='font-semibold'>
+              ${(totalInventory / 100).toFixed(2)}
+            </span>
           </div>
         </div>
 
@@ -59,7 +70,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
           </div>
           <div className='mt-3 pt-3 flex items-center gap-2 justify-between'>
             <span className='text-white/70'>Total: </span>
-            <span className='font-semibold'>{totalSession}¢</span>
+            <span className='font-semibold'>
+              ${(totalSession / 100).toFixed(2)}
+            </span>
           </div>
         </div>
 
@@ -78,7 +91,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
               <div className='flex justify-between items-center'>
                 <span className='text-white/70'>Price:</span>
                 <span className='font-medium'>
-                  {props.selectedDrink.price}¢
+                  ${(props.selectedDrink.price / 100).toFixed(2)}
                 </span>
               </div>
               <div className='flex justify-between items-center'>
@@ -122,14 +135,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
           <div className='space-y-3'>
             <div className='flex justify-between items-center'>
               <span className='text-white/70'>Session total:</span>
-              <span className='font-medium text-white'>{totalSession}¢</span>
+              <span className='font-medium text-white'>
+                ${(totalSession / 100).toFixed(2)}
+              </span>
             </div>
             {props.selectedDrink && (
               <>
                 <div className='flex justify-between items-center'>
                   <span className='text-white/70'>Required Amount:</span>
                   <span className='font-medium text-white'>
-                    {props.selectedDrink.price}¢
+                    ${(props.selectedDrink.price / 100).toFixed(2)}
                   </span>
                 </div>
                 <div className='flex justify-between items-center'>
@@ -141,7 +156,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
                         : 'text-yellow-400'
                     }`}
                   >
-                    {Math.max(0, props.selectedDrink.price - totalSession)}¢
+                    $
+                    {(
+                      Math.max(0, props.selectedDrink.price - totalSession) /
+                      100
+                    ).toFixed(2)}
                   </span>
                 </div>
               </>

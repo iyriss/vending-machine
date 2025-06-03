@@ -28,12 +28,12 @@ function App() {
   const [message, setMessage] = useState<string | JSX.Element>(initialMessage);
   const [insertedCoins, setInsertedCoins] = useState<number>(0);
   const [coinInventory, setCoinInventory] = useState(initialCoins);
+  const [showAdmin, setShowAdmin] = useState(false);
   const [sessionCoins, setSessionCoins] = useState<Record<Coin, number>>({
     5: 0,
     10: 0,
     25: 0,
   });
-
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function setTemporaryMessage(content: string | JSX.Element, duration = 3000) {
@@ -214,7 +214,7 @@ function App() {
 
   return (
     <div className='m-auto w-full min-h-screen h-full gap-10 py-5 flex justify-center'>
-      <div className='flex justify-center w-full h-full gap-10 mt-10'>
+      <div className='flex justify-center w-full h-full gap-10 mt-12 relative'>
         <div className='bg-midnight w-full h-full max-w-[465px] border border-silver/20 rounded-lg px-8 py-10'>
           <Display message={message} />
           <Drinks
@@ -228,12 +228,27 @@ function App() {
             onCancel={handleCancel}
           />
         </div>
+        {!showAdmin && (
+          <button
+            onClick={() => setShowAdmin(true)}
+            className='absolute right-0 -top-12 border-none text-primary rounded-l-lg px-4 py-2 hover:underline cursor-pointer transition-colors'
+          >
+            Show coin inventory
+          </button>
+        )}
 
-        <AdminPanel
-          coinInventory={coinInventory}
-          sessionCoins={sessionCoins}
-          selectedDrink={drinks.find((drink) => selectedDrink === drink.key)}
-        />
+        <div
+          className={`fixed right-0 top-0 h-full transition-transform duration-300 ease-in-out ${
+            showAdmin ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <AdminPanel
+            coinInventory={coinInventory}
+            sessionCoins={sessionCoins}
+            selectedDrink={drinks.find((drink) => selectedDrink === drink.key)}
+            onClose={() => setShowAdmin(false)}
+          />
+        </div>
       </div>
     </div>
   );
