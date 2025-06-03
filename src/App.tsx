@@ -238,9 +238,9 @@ function App() {
   }
 
   return (
-    <div className='m-auto w-full min-h-screen h-full gap-10 py-5 flex justify-center'>
-      <div className='flex justify-center w-full h-full gap-10 mt-12 relative'>
-        <div className='bg-midnight w-full h-full max-w-[465px] border border-silver/20 rounded-lg px-8 py-10'>
+    <div className='min-w-screen relative w-full min-h-screen h-full gap-10'>
+      <div className='w-full h-full mx-auto mt-20 relative'>
+        <div className='bg-midnight w-full h-full mx-auto max-w-[465px] border border-silver/20 rounded-lg px-8 py-10'>
           <Display message={message} />
           <Drinks
             drinks={drinks}
@@ -263,7 +263,7 @@ function App() {
         {!showAdmin && (
           <button
             onClick={() => setShowAdmin(true)}
-            className='absolute right-0 -top-12 border-none text-primary rounded-l-lg px-4 py-2 hover:underline cursor-pointer transition-colors'
+            className='absolute right-12 -top-12 border-none text-primary rounded-l-lg px-4 py-2 hover:underline cursor-pointer transition-colors'
           >
             Show coin inventory
           </button>
