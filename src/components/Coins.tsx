@@ -1,51 +1,59 @@
 const coins: Coin[] = [5, 10, 25];
 
 type CoinsProps = {
+  purchaseButtonEnabled: boolean;
   cancelButtonEnabled: boolean;
+  onPurchase: () => void;
   onCoinClick: (coin: Coin) => void;
   onCancel: () => void;
 };
 
-export const Coins = (props: CoinsProps) => {
-  function handleCoinClick(coin: Coin) {
-    props.onCoinClick(coin);
-  }
-
+export const Coins: React.FC<CoinsProps> = ({
+  purchaseButtonEnabled,
+  cancelButtonEnabled,
+  onPurchase,
+  onCoinClick,
+  onCancel,
+}) => {
   return (
-    <div className='my-8 w-full'>
+    <div className='mt-8 space-y-4'>
       <div className='text-xl font-bold mb-4'>Insert</div>
-
-      <div className='flex gap-4'>
+      <div className='grid grid-cols-3 gap-4'>
         {coins.map((coin) => (
           <button
             key={coin}
-            type='button'
-            onClick={() => handleCoinClick(coin)}
-            className='font-bold shadow-lg hover:opacity-90 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-800 h-14 w-14 flex items-center justify-center border-2 border-yellow-500/30 text-yellow-100 relative overflow-hidden cursor-pointer'
-            aria-label={`Insert ${coin} cents`}
+            onClick={() => onCoinClick(coin as Coin)}
+            className='p-4 cursor-pointer bg-gray-900 rounded border border-silver/20 hover:bg-gray-800 transition-colors'
           >
-            <div className='absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-transparent'></div>
-            <div className='absolute inset-0 bg-gradient-to-tr from-yellow-200/10 to-transparent'></div>
             {coin}¢
           </button>
         ))}
       </div>
-
-      <div className='mt-6 flex justify-end'>
+      <div className='flex gap-4'>
         <button
-          className={`border-none min-w-[100px] bg-[#dc0000] text-white px-2 py-3 rounded-md shadow-md ${
-            props.cancelButtonEnabled
-              ? 'hover:bg-[#cb0d0d] cursor-pointer '
-              : 'bg-silver/70 cursor-not-allowed'
+          onClick={onCancel}
+          disabled={!cancelButtonEnabled}
+          className={`flex-1 px-3 py-2 rounded-md transition-colors ${
+            cancelButtonEnabled
+              ? 'bg-red-600 hover:bg-red-700 cursor-pointer border-none'
+              : 'bg-silver/40 cursor-not-allowed border border-silver/20 '
           }`}
-          disabled={!props.cancelButtonEnabled}
-          onClick={props.onCancel}
         >
           Cancel
+        </button>
+
+        <button
+          onClick={onPurchase}
+          disabled={!purchaseButtonEnabled}
+          className={`flex-1 px-3 py-2 rounded-md transition-colors ${
+            purchaseButtonEnabled
+              ? 'bg-green-700 hover:bg-green-800 cursor-pointer border-none'
+              : 'bg-silver/40 cursor-not-allowed border border-silver/20 '
+          }`}
+        >
+          Purchase
         </button>
       </div>
     </div>
   );
 };
-
-// todo: cents for over 100

@@ -68,20 +68,12 @@ function App() {
 
     // Check if we already have enough money
     if (insertedCoins >= drink.price) {
-      const change = insertedCoins - drink.price;
-      if (!canMakeChange(change)) {
-        setInsertedCoins(0);
-        setSessionCoins({ 5: 0, 10: 0, 25: 0 });
-        setTemporaryMessage('Cannot provide change, please use exact amount.');
-        setSelectedDrink(null);
-
-        return;
-      }
-      dispenseDrink(drink.key);
-      returnChange(change);
-      setInsertedCoins(0);
-      setSelectedDrink(null);
-      commitCoins(sessionCoins);
+      setMessage(
+        <div>
+          <div>Balance: ${(insertedCoins / 100).toFixed(2)}</div>
+          <div className='mt-2'>Press purchase to get your {drink.name}</div>
+        </div>
+      );
     } else {
       const remaining = drink.price - insertedCoins;
       setMessage(
@@ -94,6 +86,28 @@ function App() {
         </div>
       );
     }
+  }
+
+  function handlePurchase() {
+    if (!selectedDrink) return;
+
+    const drink = drinks.find((drink) => drink.key === selectedDrink);
+    if (!drink) return;
+
+    const change = insertedCoins - drink.price;
+    if (!canMakeChange(change)) {
+      setInsertedCoins(0);
+      setSessionCoins({ 5: 0, 10: 0, 25: 0 });
+      setTemporaryMessage('Cannot provide change, please use exact amount.');
+      setSelectedDrink(null);
+      return;
+    }
+
+    dispenseDrink(drink.key);
+    returnChange(change);
+    setInsertedCoins(0);
+    setSelectedDrink(null);
+    commitCoins(sessionCoins);
   }
 
   function handleCoinClick(coin: Coin) {
@@ -130,20 +144,12 @@ function App() {
         </div>
       );
     } else {
-      const change = newAmount - drink.price;
-      if (!canMakeChange(change)) {
-        setInsertedCoins(0);
-        setSessionCoins({ 5: 0, 10: 0, 25: 0 });
-        setTemporaryMessage('Cannot provide change, please use exact amount.');
-        setSelectedDrink(null);
-        return;
-      }
-
-      dispenseDrink(drink.key);
-      returnChange(change);
-      setInsertedCoins(0);
-      setSelectedDrink(null);
-      commitCoins(newSessionCoins);
+      setMessage(
+        <div>
+          <div>Balance: ${(newAmount / 100).toFixed(2)}</div>
+          <div className='mt-2'>Press purchase to get your {drink.name}</div>
+        </div>
+      );
     }
   }
 
@@ -226,6 +232,13 @@ function App() {
             cancelButtonEnabled={insertedCoins > 0 || !!selectedDrink}
             onCoinClick={handleCoinClick}
             onCancel={handleCancel}
+            purchaseButtonEnabled={
+              !!selectedDrink &&
+              insertedCoins >=
+                (drinks.find((drink) => drink.key === selectedDrink)?.price ||
+                  0)
+            }
+            onPurchase={handlePurchase}
           />
         </div>
         {!showAdmin && (

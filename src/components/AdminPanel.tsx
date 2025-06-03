@@ -149,18 +149,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = (props) => {
                 </div>
                 <div className='flex justify-between items-center'>
                   <span className='text-white/70'>Remaining:</span>
-                  <span
-                    className={`font-medium ${
-                      totalSession >= props.selectedDrink.price
-                        ? 'text-green-400'
-                        : 'text-yellow-400'
-                    }`}
-                  >
+                  <span className='font-medium text-white'>
                     $
-                    {(
-                      Math.max(0, props.selectedDrink.price - totalSession) /
-                      100
-                    ).toFixed(2)}
+                    {((props.selectedDrink.price - totalSession) / 100).toFixed(
+                      2
+                    )}
                   </span>
                 </div>
               </>
